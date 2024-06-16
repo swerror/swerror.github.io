@@ -1,14 +1,78 @@
-<style>
-p {
-  font-family: sans-serif;
-}
-  a {
-  font-family: sans-serif;
-}
-</style>
-<h1>ACHTUNG! Der Shop wurde eingestellt (aufgegeben). Frage NICHT nach Support.</h1>
-<h2>/sw theerrorexe ist ein Shop auf dem Citybuild-Netzwerk OPSUCHT, der Shop wird von TheErrorExe(.TheErrorExe) BLITZ_2020 und Dakhil_2012 betrieben.</h2>
-<h1>Kontakt</h1>
-<a href="https://discord.gg/sjDdt2zp">Discord (Wird bald abgeschaltet)</a><br>
-<a href="mailto:swerror@outlook.de">Kontaktiere swerror@outlook.de (Bis zum 1. Juni 2024).</a>
-<br><p>Januar 2024 - Mai 2024. SilasMC Server Group (Not Listed)</p>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verbinde mit SilasMC Server…</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        .loading-container {
+            text-align: center;
+        }
+        .loading-gif {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <h1>Verbinde mit SilasMC Server…</h1>
+        <div class="loading-gif">
+            <img src="loading.gif" alt="Laden...">
+        </div>
+    </div>
+
+    <script>
+        function fetchStatus() {
+            fetch('https://silasmc.github.io/api/advanced/status.conf')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    parseStatus(data);
+                })
+                .catch(error => {
+                    showError('112-4522', 'Konnte nicht zum Server verbinden. Bitte kontaktiere silasmc@outlook.de für Support.');
+                });
+        }
+
+        function parseStatus(data) {
+            const statusLine = data.match(/STATUS:([^\s]+)/);
+            const errorCodeLine = data.match(/ERRORCODE:(.*)/);
+            const messageLine = data.match(/MESSAGE:(.*)/);
+
+            if (statusLine) {
+                const status = statusLine[1];
+                if (status === 'OK') {
+                    window.location.href = 'direct.html';
+                } else if (status === 'MESSAGE' && errorCodeLine && messageLine) {
+                    const errorCode = errorCodeLine[1];
+                    const message = messageLine[1];
+                    showError(errorCode, message);
+                } else {
+                    showError('Unknown', 'Unbekannter Fehler');
+                }
+            } else {
+                showError('Unknown', 'Fehlerhafte Antwort vom Server');
+            }
+        }
+
+        function showError(code, message) {
+            alert(`Fehlercode: ${code}\nBeschreibung: ${message}`);
+        }
+
+        setTimeout(fetchStatus, 5000);
+    </script>
+</body>
+</html>
