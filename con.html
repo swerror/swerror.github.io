@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Webseite</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Authentication Server</h1>
+
+        <!-- Registrierung -->
+        <div class="form-container">
+            <h2>Registrierung</h2>
+            <form id="register-form">
+                <input type="text" id="reg-username" placeholder="Benutzername" required>
+                <input type="email" id="reg-email" placeholder="E-Mail" required>
+                <input type="password" id="reg-password" placeholder="Passwort" required>
+                <button type="submit">Registrieren</button>
+                <p id="register-response"></p>
+            </form>
+        </div>
+
+        <!-- Bestätigung -->
+        <div class="form-container">
+            <h2>Bestätigung</h2>
+            <form id="confirm-form">
+                <input type="email" id="confirm-email" placeholder="E-Mail" required>
+                <input type="text" id="confirmation-code" placeholder="Bestätigungscode" required>
+                <button type="submit">Bestätigen</button>
+                <p id="confirm-response"></p>
+            </form>
+        </div>
+
+        <!-- Anmeldung -->
+        <div class="form-container">
+            <h2>Anmeldung</h2>
+            <form id="login-form">
+                <input type="email" id="login-email" placeholder="E-Mail" required>
+                <input type="password" id="login-password" placeholder="Passwort" required>
+                <button type="submit">Anmelden</button>
+                <p id="login-response"></p>
+            </form>
+        </div>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>
