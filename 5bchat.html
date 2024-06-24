@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGB</title>
+</head>
+<body>
+    <div id="content">
+        <p>Bitte lesen sie es sich durch:</p>
+        <pre id="agb-content"></pre>
+        <button id="accept-btn">ICH AKZEPTIERE</button>
+        <button id="reject-btn">ICH AKZEPTIERE NICHT</button>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const agbContent = document.getElementById("agb-content");
+            const acceptBtn = document.getElementById("accept-btn");
+            const rejectBtn = document.getElementById("reject-btn");
+
+            // Fetch the AGB content
+            fetch('agb.txt')
+                .then(response => response.text())
+                .then(text => agbContent.textContent = text);
+
+            // Check cookies and redirect if already accepted
+            const cookies = document.cookie.split('; ').reduce((acc, cookie) => {
+                const [name, value] = cookie.split('=');
+                acc[name] = value;
+                return acc;
+            }, {});
+
+            fetch('stand.txt')
+                .then(response => response.text())
+                .then(stand => {
+                    const agbVersion = parseInt(stand.trim());
+                    const savedVersion = parseInt(cookies['agb_version'] || '0');
+
+                    if (cookies['agb_accepted'] === 'true' && savedVersion >= agbVersion) {
+                        window.location.href = 'con.html';
+                    } else {
+                        document.cookie = 'agb_accepted=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                        document.cookie = 'agb_version=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                    }
+                });
+
+            acceptBtn.addEventListener('click', function() {
+                fetch('stand.txt')
+                    .then(response => response.text())
+                    .then(stand => {
+                        const agbVersion = parseInt(stand.trim());
+                        document.cookie = `agb_accepted=true; path=/;`;
+                        document.cookie = `agb_version=${agbVersion}; path=/;`;
+                        window.location.href = 'con.html';
+                    });
+            });
+
+            rejectBtn.addEventListener('click', function() {
+                window.location.href = 'about:blank';
+            });
+        });
+    </script>
+</body>
+</html>
